@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
         self.helpMenu = self.menuBar.addMenu("&Help")
         self.aNewProject = self.fileMenu.addAction("Start new project")
         self.aOpen = self.fileMenu.addAction("Open")
-        self.aOpen = self.fileMenu.addAction("Save as...")
+        self.aSave = self.fileMenu.addAction("Save as...")
         self.aExport = self.fileMenu.addAction("Export as...")
         self.fileMenu.addSeparator()
         self.aExitApp = self.fileMenu.addAction("Exit")
@@ -115,6 +115,7 @@ class MainWindow(QMainWindow):
     def connectSlots(self):
         self.aExitApp.triggered.connect(lambda: sys.exit(0))
         self.aExport.triggered.connect(self.actionExport)
+        self.aSave.triggered.connect(self.actionSave)
         self.aNewProject.triggered.connect(self.actionNewProject)
         self.pbAddBox.clicked.connect(self.addBox)
         self.pbDeleteBox.clicked.connect(self.deleteBox)
@@ -131,6 +132,12 @@ class MainWindow(QMainWindow):
         create_code = codegen.codegen(self, "mynode", self.projectData.MiniBlocks)
         if export_as != "":
             create_code.writeToFile(export_as[0])
+
+    def actionSave(self):
+        save_as = QFileDialog.getSaveFileName(self, "Save as...")
+        save_code = codegen.codegen(self, "mynode", self.projectData.MiniBlocks)
+        if save_as != "":
+            save_code.saveToFile(save_as[0])
 
     def cbSwitch(self):
         self.current_block = self.projectData.MiniBlocks[self.cbSelectBox.currentIndex()]
