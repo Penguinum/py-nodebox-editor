@@ -44,13 +44,3 @@ class codegen:
         for line in self.tail:
             output_file.write(line)
         output_file.close()
-
-    def saveToFile(self, save_as):
-        output_file = open(save_as, "w+")
-        for b in self.miniblocks:
-            output_file.write(" ".join([str(b.p1.x), str(b.p1.z), str(b.p1.y),
-                             str(b.p2.x), str(b.p2.z), str(b.p2.y)]) + "\n")
-        output_file.close()
-
-    def loadFromFile(self, load_from):
-        return

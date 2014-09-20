@@ -11,33 +11,29 @@ from xyzview import XYZview
 from mainview import MainView
 from point import MiniBlock, Point
 from PyQt5.QtCore import Qt
+import opensave
 
-
-class Data():
-    def __init__(self):
-        self.parts = []
-        self.MiniBlocks = []
-        self.centralBlock = Point(0, 0, 0)
-
-    def setPart(self, x, y):
-        self.parts.append([x, y])
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.projectData = Data()
+
+        self.parts = []
+        self.miniblocks = []
+        self.centralBlock = Point(0, 0, 0)
         self.createGUI()
         self.createMenu()
         self.connectSlots()
         self.project_file = ""
         self.current_block = 0
 
+
     def createGUI(self):
         self.widget = QWidget(self)
         self.gvMain = MainView(self)
-        self.gvX = XYZview(self, "YZ", self.projectData.MiniBlocks)
-        self.gvY = XYZview(self, "XZ", self.projectData.MiniBlocks)
-        self.gvZ = XYZview(self, "XY", self.projectData.MiniBlocks)
+        self.gvX = XYZview(self, "YZ", self.miniblocks)
+        self.gvY = XYZview(self, "XZ", self.miniblocks)
+        self.gvZ = XYZview(self, "XY", self.miniblocks)
         self.cbSelectBox = QComboBox(self)
         self.pbAddBox = QPushButton("Add Box", self)
         self.pbDeleteBox = QPushButton("Delete selected box", self)
@@ -87,14 +83,14 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
     def addBox(self):
-        self.projectData.MiniBlocks.append(MiniBlock(Point(-1, -1, -1),
+        self.miniblocks.append(MiniBlock(Point(-1, -1, -1),
                                                      Point(8, 8, 8)))
-        self.cbSelectBox.addItems(["Block" + str(len(self.projectData.MiniBlocks))])
+        self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         self.gvX.update()
         self.gvY.update()
         self.gvZ.update()
-        self.current_block = self.projectData.MiniBlocks[self.cbSelectBox.currentIndex()]
+        self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
         self.gvX.current_block = self.current_block
         self.gvY.current_block = self.current_block
         self.gvZ.current_block = self.current_block
@@ -102,7 +98,7 @@ class MainWindow(QMainWindow):
     def deleteBox(self):
         if self.cbSelectBox.count() != 0:
             idx = self.cbSelectBox.currentIndex()
-            del self.projectData.MiniBlocks[idx]
+            del self.miniblocks[idx]
             self.cbSelectBox.removeItem(idx)
             try:
                 self.cbSelectBox.setCurrentIndex(idx-1)
@@ -121,6 +117,7 @@ class MainWindow(QMainWindow):
         self.pbDeleteBox.clicked.connect(self.deleteBox)
         self.cbSelectBox.activated.connect(self.cbSwitch)
         self.slScale.valueChanged.connect(self.slScaleChange)
+        self.aOpen.triggered.connect(self.actionOpen)
 
     def actionNewProject(self):
         a = newproject.NewProjectDialog(self)
@@ -129,18 +126,31 @@ class MainWindow(QMainWindow):
 
     def actionExport(self):
         export_as = QFileDialog.getSaveFileName(self, "Export as...")
-        create_code = codegen.codegen(self, "mynode", self.projectData.MiniBlocks)
+        create_code = codegen.codegen(self, "mynode", self.miniblocks)
         if export_as != "":
             create_code.writeToFile(export_as[0])
 
     def actionSave(self):
-        save_as = QFileDialog.getSaveFileName(self, "Save as...")
-        save_code = codegen.codegen(self, "mynode", self.projectData.MiniBlocks)
+        save_as = QFileDialog.getSaveFileName(self, "Save as...")[0]
         if save_as != "":
-            save_code.saveToFile(save_as[0])
+            output_file = open(save_as, "w+")
+            for b in self.miniblocks:
+                output_file.write(" ".join([str(b.p1.x), str(b.p1.z), str(b.p1.y),
+                                 str(b.p2.x), str(b.p2.z), str(b.p2.y)]) + "\n")
+            output_file.close()
+
+    def actionOpen(self):
+        open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
+        input_file = open(open_from, "r")
+        self.miniblocks.clear()
+        for line in input_file:
+            t = [int(token) for token in line.split(" ")]
+            self.miniblocks.append(MiniBlock(Point(t[0], t[2], t[1]), Point(t[3], t[5], t[4])))
+        input_file.close()
+        self.update()
 
     def cbSwitch(self):
-        self.current_block = self.projectData.MiniBlocks[self.cbSelectBox.currentIndex()]
+        self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
         self.gvX.current_block = self.current_block
         self.gvY.current_block = self.current_block
         self.gvZ.current_block = self.current_block
