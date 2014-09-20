@@ -11,7 +11,6 @@ from xyzview import XYZview
 from mainview import MainView
 from point import MiniBlock, Point
 from PyQt5.QtCore import Qt
-import opensave
 
 
 class MainWindow(QMainWindow):
