@@ -62,8 +62,8 @@ class MainWindow(QMainWindow):
 
         self.grLayout.addWidget(QLabel("X view"), 2, 0)
         self.grLayout.addWidget(self.gvX, 3, 0)
-        self.grLayout.addWidget(self.gvZ, 3, 1)
         self.grLayout.addWidget(QLabel("Z view"), 2, 1)
+        self.grLayout.addWidget(self.gvZ, 3, 1)
         self.widget.setLayout(self.hbMainLayout)
         self.setCentralWidget(self.widget)
         self.setWindowTitle("CubeMaker")
@@ -142,9 +142,14 @@ class MainWindow(QMainWindow):
         open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
         input_file = open(open_from, "r")
         self.miniblocks.clear()
+        self.gvX.current_block = 0
+        self.gvY.current_block = 0
+        self.gvZ.current_block = 0
+        self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
             self.miniblocks.append(MiniBlock(Point(t[0], t[2], t[1]), Point(t[3], t[5], t[4])))
+            self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         input_file.close()
         self.update()
 

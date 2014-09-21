@@ -76,16 +76,17 @@ class XYZview(QWidget):
                            scale*b.p2.x-scale*b.p1.x, scale*b.p1.z-scale*b.p2.z)
         p.setPen(QPen(QColor(50, 150, 50), 2))
 
-        b = self.current_block
-        if (self.coords == "XY"):
-            p.drawRect(x0 + scale*b.p1.x, y0 - scale*b.p1.y,
-                       scale*b.p2.x-scale*b.p1.x, scale*b.p1.y-scale*b.p2.y)
-        elif (self.coords == "YZ"):
-            p.drawRect(x0 + scale*b.p1.z, y0 - scale*b.p1.y,
-                       scale*b.p2.z-scale*b.p1.z, scale*b.p1.y-scale*b.p2.y)
-        elif (self.coords == "XZ"):
-            p.drawRect(x0 + scale*b.p1.x, y0 - scale*b.p1.z,
-                       scale*b.p2.x-scale*b.p1.x, scale*b.p1.z-scale*b.p2.z)
+        if self.current_block != 0:
+            b = self.current_block
+            if (self.coords == "XY"):
+                p.drawRect(x0 + scale*b.p1.x, y0 - scale*b.p1.y,
+                           scale*b.p2.x-scale*b.p1.x, scale*b.p1.y-scale*b.p2.y)
+            elif (self.coords == "YZ"):
+                p.drawRect(x0 + scale*b.p1.z, y0 - scale*b.p1.y,
+                           scale*b.p2.z-scale*b.p1.z, scale*b.p1.y-scale*b.p2.y)
+            elif (self.coords == "XZ"):
+                p.drawRect(x0 + scale*b.p1.x, y0 - scale*b.p1.z,
+                           scale*b.p2.x-scale*b.p1.x, scale*b.p1.z-scale*b.p2.z)
 
     def mousePressEvent(self, e):
         if self.current_block == 0:
