@@ -63,6 +63,10 @@ class XYZview(QWidget):
         p.setPen(QPen(QColor(50, 50, 50), 2))
         x0, y0 = w/2, h/2
         for b in self.Model:
+            if b == self.current_block:
+                p.setPen(QPen(QColor(100, 200, 100)))
+            else:
+                p.setPen(QPen(QColor(0, 0, 0)))
             if (self.coords == "XY"):
                 p.drawRect(x0 + scale*b.p1.x, y0 - scale*b.p1.y,
                            scale*b.p2.x-scale*b.p1.x, scale*b.p1.y-scale*b.p2.y)
