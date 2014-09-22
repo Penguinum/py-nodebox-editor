@@ -103,9 +103,11 @@ class MainWindow(QMainWindow):
                 self.cbSelectBox.setCurrentIndex(idx-1)
             except:
                 self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
-        self.gvX.update()
-        self.gvY.update()
-        self.gvZ.update()
+        if len(self.miniblocks) == 0:
+            self.gvX.current_block = 0
+            self.gvY.current_block = 0
+            self.gvZ.current_block = 0
+        self.update()
 
     def connectSlots(self):
         self.aExitApp.triggered.connect(lambda: sys.exit(0))
@@ -119,9 +121,13 @@ class MainWindow(QMainWindow):
         self.aOpen.triggered.connect(self.actionOpen)
 
     def actionNewProject(self):
-        a = newproject.NewProjectDialog(self)
-        a.raise_()
-        a.exec_()
+        self.miniblocks.clear()
+        self.current_block = 0
+        self.cbSelectBox.clear()
+        self.gvX.current_block = 0
+        self.gvY.current_block = 0
+        self.gvZ.current_block = 0
+        self.update()
 
     def actionExport(self):
         export_as = QFileDialog.getSaveFileName(self, "Export as...")
