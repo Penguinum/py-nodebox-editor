@@ -115,16 +115,22 @@ class XYZview(QWidget):
         rr4 = ((c1 - p2c1)**2 + (c2 - p2c2)**2)
         rrmin = min(rr1, rr2, rr3, rr4)
         print(rr1, rr2, rr3, rr4)
-        if rrmin == rr1:
-            self.changing_point = 1
-        elif rrmin == rr2:
-            self.changing_point = 2
-        elif rrmin == rr3:
-            self.changing_point = 3
-        elif rrmin == rr4:
-            self.changing_point = 4
+        print(rrmin)
+        if (rrmin < 100):
+            if rrmin == rr1:
+                self.changing_point = 1
+            elif rrmin == rr2:
+                self.changing_point = 2
+            elif rrmin == rr3:
+                self.changing_point = 3
+            elif rrmin == rr4:
+                self.changing_point = 4
+            else:
+                self.changing_point = 0
+            return
         else:
-            self.changing_point = 0
+            self.changing_point = 5
+
 
     def mouseMoveEvent(self, e):
         c1 = int((e.pos().x() - self.x0) / self.scale)
@@ -133,39 +139,45 @@ class XYZview(QWidget):
             if self.changing_point == 1:
                 self.current_block.p1.x = c1
                 self.current_block.p1.y = c2
-            if self.changing_point == 2:
+            elif self.changing_point == 2:
                 self.current_block.p1.x = c1
                 self.current_block.p2.y = c2
-            if self.changing_point == 3:
+            elif self.changing_point == 3:
                 self.current_block.p2.x = c1
                 self.current_block.p1.y = c2
-            if self.changing_point == 4:
+            elif self.changing_point == 4:
                 self.current_block.p2.x = c1
                 self.current_block.p2.y = c2
+            elif self.changing_point == 5:
+                print("something")
         elif self.coords == "XZ":
             if self.changing_point == 1:
                 self.current_block.p1.x = c1
                 self.current_block.p1.z = c2
-            if self.changing_point == 2:
+            elif self.changing_point == 2:
                 self.current_block.p1.x = c1
                 self.current_block.p2.z = c2
-            if self.changing_point == 3:
+            elif self.changing_point == 3:
                 self.current_block.p2.x = c1
                 self.current_block.p1.z = c2
-            if self.changing_point == 4:
+            elif self.changing_point == 4:
                 self.current_block.p2.x = c1
                 self.current_block.p2.z = c2
+            elif self.changing_point == 5:
+                print("something")
         elif self.coords == "YZ":
             if self.changing_point == 1:
                 self.current_block.p1.z = c1
                 self.current_block.p1.y = c2
-            if self.changing_point == 2:
+            elif self.changing_point == 2:
                 self.current_block.p1.z = c1
                 self.current_block.p2.y = c2
-            if self.changing_point == 3:
+            elif self.changing_point == 3:
                 self.current_block.p2.z = c1
                 self.current_block.p1.y = c2
-            if self.changing_point == 4:
+            elif self.changing_point == 4:
                 self.current_block.p2.z = c1
                 self.current_block.p2.y = c2
+            elif self.changing_point == 5:
+                print("something")
         self.parent().update()
