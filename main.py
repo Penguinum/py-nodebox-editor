@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
     def addBox(self):
-        self.miniblocks.append(MiniBlock(Point(-1, -1, -1),
+        self.miniblocks.append(MiniBlock(Point(-8, -8, -8),
                                                      Point(8, 8, 8)))
         self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
