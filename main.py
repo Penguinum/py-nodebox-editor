@@ -39,6 +39,12 @@ class MainWindow(QMainWindow):
         self.slScale = QSlider(self)
         self.slScale.setOrientation(Qt.Horizontal)
         self.slScale.setRange(5, 15)
+        self.pbSwapXY = QPushButton("Spap X and Y", self)
+        self.pbSwapXZ = QPushButton("Spap X and Z", self)
+        self.pbSwapYZ = QPushButton("Spap Y and Z", self)
+        self.pbTurnX  = QPushButton("Turn X", self)
+        self.pbTurnY  = QPushButton("Turn Y", self)
+        self.pbTurnZ  = QPushButton("Turn Z", self)
         self.grLayout = QGridLayout()
         self.grLayout.addWidget(QLabel("Main view"), 0, 0)
         self.grLayout.addWidget(self.gvMain, 1, 0)
@@ -55,6 +61,13 @@ class MainWindow(QMainWindow):
         self.vbRightLayout.addWidget(self.slScale)
         self.vbRightLayout.addItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.vbRightLayout.addWidget(self.pbSwapXY)
+        self.vbRightLayout.addWidget(self.pbSwapXZ)
+        self.vbRightLayout.addWidget(self.pbSwapYZ)
+        self.vbRightLayout.addWidget(self.pbTurnX)
+        self.vbRightLayout.addWidget(self.pbTurnY)
+        self.vbRightLayout.addWidget(self.pbTurnZ)
+
 
         self.hbMainLayout = QHBoxLayout()
         self.hbMainLayout.addLayout(self.grLayout, 10)
@@ -119,6 +132,12 @@ class MainWindow(QMainWindow):
         self.cbSelectBox.activated.connect(self.cbSwitch)
         self.slScale.valueChanged.connect(self.slScaleChange)
         self.aOpen.triggered.connect(self.actionOpen)
+        self.pbSwapXY.clicked.connect(self.swapXY)
+        self.pbSwapXZ.clicked.connect(self.swapXZ)
+        self.pbSwapYZ.clicked.connect(self.swapYZ)
+        self.pbTurnX.clicked.connect(self.turnX)
+        self.pbTurnY.clicked.connect(self.turnY)
+        self.pbTurnZ.clicked.connect(self.turnZ)
 
     def actionNewProject(self):
         self.miniblocks.clear()
@@ -170,7 +189,36 @@ class MainWindow(QMainWindow):
         self.gvY.scale = self.slScale.value()
         self.gvZ.scale = self.slScale.value()
         self.update()
+    
+    def swapXY(self):
+        for b in self.miniblocks:
+            b.p1.x, b.p2.x, b.p1.y, b.p2.y = b.p1.y, b.p2.y, b.p1.x, b.p2.x
+        self.update()
 
+    def swapXZ(self):
+        for b in self.miniblocks:
+            b.p1.x, b.p2.x, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.x, b.p2.x
+        self.update()
+
+    def swapYZ(self):
+        for b in self.miniblocks:
+            b.p1.y, b.p2.y, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.y, b.p2.y
+        self.update()
+
+    def turnX(self):
+        for b in self.miniblocks:
+            b.p1.x, b.p2.x = -b.p1.x, -b.p2.x
+        self.update()
+
+    def turnY(self):
+        for b in self.miniblocks:
+            b.p1.y, b.p2.y = -b.p1.y, -b.p2.y
+        self.update()
+
+    def turnZ(self):
+        for b in self.miniblocks:
+            b.p1.z, b.p2.z = -b.p1.z, -b.p2.z
+        self.update()
 
 def main():
     app = QApplication(sys.argv)
