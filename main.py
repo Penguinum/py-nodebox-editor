@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import (QPushButton, QGridLayout, QWidget, QApplication,
                              QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
                              QSpacerItem, QSizePolicy, QSlider)
 import sys
-import newproject
 import codegen
 from xyzview import XYZview
 from mainview import MainView
