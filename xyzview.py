@@ -1,6 +1,11 @@
-from PyQt5.QtWidgets import (QWidget, QSizePolicy)
-from PyQt5.QtGui import (QPainter, QBrush, QPen, QColor)
-from PyQt5.QtCore import (QPoint)
+try:
+    from PyQt5.QtWidgets import (QWidget, QSizePolicy)
+    from PyQt5.QtGui import (QPainter, QBrush, QPen, QColor)
+    from PyQt5.QtCore import (QPoint)
+except:
+    from PyQt4.QtGui import (QPainter, QBrush, QPen, QColor, QWidget, QSizePolicy)
+    from PyQt4.QtCore import (QPoint)
+
 from point import MiniBlock
 
 

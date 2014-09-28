@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 
-from PyQt5.QtWidgets import (QPushButton, QGridLayout, QWidget, QApplication,
-                             QLabel, QMenuBar, QVBoxLayout,
-                             QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
-                             QSpacerItem, QSizePolicy, QSlider)
+try:
+    from PyQt5.QtWidgets import (QPushButton, QGridLayout, QWidget, QApplication,
+                                 QLabel, QMenuBar, QVBoxLayout,
+                                 QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+                                 QSpacerItem, QSizePolicy, QSlider)
+    from PyQt5.QtCore import Qt
+except:
+    from PyQt4.QtGui import (QPushButton, QGridLayout, QWidget, QApplication,
+                                 QLabel, QMenuBar, QVBoxLayout,
+                                 QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+                                 QSpacerItem, QSizePolicy, QSlider)
+    from PyQt4.QtCore import Qt
+
 import sys
 import codegen
 from xyzview import XYZview
 from mainview import MainView
 from point import MiniBlock, Point
-from PyQt5.QtCore import Qt
 
 
 class MainWindow(QMainWindow):

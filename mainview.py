@@ -1,5 +1,8 @@
-from PyQt5.QtWidgets import (QWidget, QSizePolicy)
-from PyQt5.QtGui import (QPainter, QBrush, QColor)
+try:
+    from PyQt5.QtWidgets import (QWidget, QSizePolicy)
+    from PyQt5.QtGui import (QPainter, QBrush, QColor)
+except:
+    from PyQt4.QtGui import (QWidget, QSizePolicy, QPainter, QBrush, QColor)
 
 
 class MainView(QWidget):
