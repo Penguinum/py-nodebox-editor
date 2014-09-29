@@ -12,7 +12,7 @@ except:
                                  QLabel, QMenuBar, QVBoxLayout,
                                  QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
                                  QSpacerItem, QSizePolicy, QSlider)
-    
+
     from PyQt4.QtCore import Qt
     is_qt5 = False
 
@@ -49,9 +49,9 @@ class MainWindow(QMainWindow):
         self.slScale = QSlider(self)
         self.slScale.setOrientation(Qt.Horizontal)
         self.slScale.setRange(5, 15)
-        self.pbSwapXY = QPushButton("Spap X and Y", self)
-        self.pbSwapXZ = QPushButton("Spap X and Z", self)
-        self.pbSwapYZ = QPushButton("Spap Y and Z", self)
+        self.pbSwapXY = QPushButton("Swap X and Y", self)
+        self.pbSwapXZ = QPushButton("Swap X and Z", self)
+        self.pbSwapYZ = QPushButton("Swap Y and Z", self)
         self.pbTurnX  = QPushButton("Turn X", self)
         self.pbTurnY  = QPushButton("Turn Y", self)
         self.pbTurnZ  = QPushButton("Turn Z", self)
@@ -207,7 +207,7 @@ class MainWindow(QMainWindow):
         self.gvY.scale = self.slScale.value()
         self.gvZ.scale = self.slScale.value()
         self.update()
-    
+
     def swapXY(self):
         for b in self.miniblocks:
             b.p1.x, b.p2.x, b.p1.y, b.p2.y = b.p1.y, b.p2.y, b.p1.x, b.p2.x
