@@ -6,12 +6,15 @@ try:
                                  QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
                                  QSpacerItem, QSizePolicy, QSlider)
     from PyQt5.QtCore import Qt
+    is_qt5 = True
 except:
     from PyQt4.QtGui import (QPushButton, QGridLayout, QWidget, QApplication,
                                  QLabel, QMenuBar, QVBoxLayout,
                                  QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
                                  QSpacerItem, QSizePolicy, QSlider)
+    
     from PyQt4.QtCore import Qt
+    is_qt5 = False
 
 import sys
 import codegen
@@ -59,7 +62,6 @@ class MainWindow(QMainWindow):
         self.grLayout.addWidget(self.gvY, 1, 1)
 
         self.vbRightLayout = QVBoxLayout()
-
         self.vbRightLayout.addWidget(QLabel("Select box"))
         self.vbRightLayout.addWidget(self.cbSelectBox)
         self.vbRightLayout.addWidget(self.pbAddBox)
@@ -156,13 +158,19 @@ class MainWindow(QMainWindow):
         self.update()
 
     def actionExport(self):
-        export_as = QFileDialog.getSaveFileName(self, "Export as...")
+        if is_qt5:
+            export_as = QFileDialog.getSaveFileName(self, "Export as...")[0]
+        else:
+            export_as = QFileDialog.getSaveFileName(self, "Export as...")
         create_code = codegen.codegen(self, "mynode", self.miniblocks)
         if export_as != "":
-            create_code.writeToFile(export_as[0])
+            create_code.writeToFile(export_as)
 
     def actionSave(self):
-        save_as = QFileDialog.getSaveFileName(self, "Save as...")[0]
+        if is_qt5:
+            save_as = QFileDialog.getSaveFileName(self, "Save as...")[0]
+        else:
+            save_as = QFileDialog.getSaveFileName(self, "Save as...")
         if save_as != "":
             output_file = open(save_as, "w+")
             for b in self.miniblocks:
@@ -171,7 +179,10 @@ class MainWindow(QMainWindow):
             output_file.close()
 
     def actionOpen(self):
-        open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
+        if is_qt5:
+            open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
+        else:
+            open_from = QFileDialog.getOpenFileName(self, "Open file")
         input_file = open(open_from, "r")
         self.miniblocks.clear()
         self.gvX.current_block = 0
