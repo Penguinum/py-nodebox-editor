@@ -116,7 +116,7 @@ class XYZview(QWidget):
             p2c2 = self.current_block.p2.z
         rr1 = ((c1 - p1c1)**2 + (c2 - p1c2)**2)
         rr2 = ((c1 - p1c1)**2 + (c2 - p2c2)**2)
-        rr3 = ((c1 - p2c1)**2 + (c2 - p1c1)**2)
+        rr3 = ((c1 - p2c1)**2 + (c2 - p1c2)**2)
         rr4 = ((c1 - p2c1)**2 + (c2 - p2c2)**2)
         rrmin = min(rr1, rr2, rr3, rr4)
         print(rr1, rr2, rr3, rr4)
