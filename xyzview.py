@@ -110,10 +110,10 @@ class XYZview(QWidget):
             p2c1 = self.current_block.p2.x
             p2c2 = self.current_block.p2.z
         elif self.coords == "YZ":
-            p1c1 = self.current_block.p1.y
-            p1c2 = self.current_block.p1.z
-            p2c1 = self.current_block.p2.y
-            p2c2 = self.current_block.p2.z
+            p1c1 = self.current_block.p1.z
+            p1c2 = self.current_block.p1.y
+            p2c1 = self.current_block.p2.z
+            p2c2 = self.current_block.p2.y
         rr1 = ((c1 - p1c1)**2 + (c2 - p1c2)**2)
         rr2 = ((c1 - p1c1)**2 + (c2 - p2c2)**2)
         rr3 = ((c1 - p2c1)**2 + (c2 - p1c2)**2)
