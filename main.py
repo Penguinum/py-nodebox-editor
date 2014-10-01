@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
 
     def createGUI(self):
         self.widget = QWidget(self)
-        self.gvMain = MainView(self)
+        self.gvMain = MainView(self, 0, self.miniblocks)
         self.gvX = XYZview(self, "YZ", self.miniblocks)
         self.gvY = XYZview(self, "XZ", self.miniblocks)
         self.gvZ = XYZview(self, "XY", self.miniblocks)
@@ -111,6 +111,7 @@ class MainWindow(QMainWindow):
         self.gvX.update()
         self.gvY.update()
         self.gvZ.update()
+        self.gvMain.update()
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
         self.gvX.current_block = self.current_block
         self.gvY.current_block = self.current_block
@@ -206,6 +207,7 @@ class MainWindow(QMainWindow):
         self.gvX.scale = self.slScale.value()
         self.gvY.scale = self.slScale.value()
         self.gvZ.scale = self.slScale.value()
+        self.gvMain.scale = self.slScale.value()
         self.update()
 
     def swapXY(self):
