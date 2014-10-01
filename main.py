@@ -20,7 +20,7 @@ import sys
 import codegen
 from xyzview import XYZview
 from mainview import MainView
-from point import MiniBlock, Point
+from point import MiniBlock
 
 
 class MainWindow(QMainWindow):
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
         self.parts = []
         self.miniblocks = []
-        self.centralBlock = Point(0, 0, 0)
+        self.centralBlock = [0, 0, 0]
         self.createGUI()
         self.createMenu()
         self.connectSlots()
@@ -104,8 +104,8 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
     def addBox(self):
-        self.miniblocks.append(MiniBlock(Point(-8, -8, -8),
-                                                     Point(8, 8, 8)))
+        self.miniblocks.append(MiniBlock([-8, -8, -8],
+                                                     [8, 8, 8]))
         self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         self.gvX.update()
@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
         self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
-            self.miniblocks.append(MiniBlock(Point(t[0], t[2], t[1]), Point(t[3], t[5], t[4])))
+            self.miniblocks.append(MiniBlock([t[0], t[2], t[1]], [t[3], t[5], t[4]]))
             self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         input_file.close()
         self.update()

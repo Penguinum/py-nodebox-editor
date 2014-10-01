@@ -1,11 +1,10 @@
-class Point:
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-
-
+import numpy as np
 class MiniBlock:
     def __init__(self, p1, p2):
-        self.p1 = p1
-        self.p2 = p2
+        self.value = np.array([p1, p2])
+
+    def p1(self):
+        return self.value[0]
+
+    def p2(self):
+        return self.value[1]
