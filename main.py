@@ -175,8 +175,8 @@ class MainWindow(QMainWindow):
         if save_as != "":
             output_file = open(save_as, "w+")
             for b in self.miniblocks:
-                output_file.write(" ".join([str(b.p1.x), str(b.p1.z), str(b.p1.y),
-                                 str(b.p2.x), str(b.p2.z), str(b.p2.y)]) + "\n")
+                output_file.write(" ".join([str(b.p1()[0]), str(b.p1()[2]), str(b.p1()[1]),
+                                 str(b.p2()[0]), str(b.p2()[2]), str(b.p2()[1])]) + "\n")
             output_file.close()
 
     def actionOpen(self):
@@ -212,32 +212,32 @@ class MainWindow(QMainWindow):
 
     def swapXY(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x, b.p1.y, b.p2.y = b.p1.y, b.p2.y, b.p1.x, b.p2.x
+            b.swapXY()
         self.update()
 
     def swapXZ(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.x, b.p2.x
+            b.swapXZ()
         self.update()
 
     def swapYZ(self):
         for b in self.miniblocks:
-            b.p1.y, b.p2.y, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.y, b.p2.y
+            b.swapYZ()
         self.update()
 
     def turnX(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x = -b.p1.x, -b.p2.x
+            b.turnX()
         self.update()
 
     def turnY(self):
         for b in self.miniblocks:
-            b.p1.y, b.p2.y = -b.p1.y, -b.p2.y
+            b.turnY()
         self.update()
 
     def turnZ(self):
         for b in self.miniblocks:
-            b.p1.z, b.p2.z = -b.p1.z, -b.p2.z
+            b.turnZ()
         self.update()
 
 def main():

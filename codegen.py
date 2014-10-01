@@ -39,8 +39,8 @@ class codegen:
         for line in self.head:
             output_file.write(line)
         for b in self.miniblocks:
-            output_file.write("\t\t\t{" + ", ".join([str(b.p1.x/s), str(b.p1.z/s), str(b.p1.y/s),
-                             str(b.p2.x/s), str(b.p2.z/s), str(b.p2.y/s)]) + "},\n")
+            output_file.write("\t\t\t{" + ", ".join([str(b.p1()[0]/s), str(b.p1()[2]/s), str(b.p1()[1]/s),
+                             str(b.p2()[0]/s), str(b.p2()[2]/s), str(b.p2()[1]/s)]) + "},\n")
         for line in self.tail:
             output_file.write(line)
         output_file.close()

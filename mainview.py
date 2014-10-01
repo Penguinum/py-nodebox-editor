@@ -17,21 +17,21 @@ class MainView(QWidget):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def paintEvent(self, e):
-        print("Hello, world!")
-        #painter = QPainter(self)
-        #w = self.width()
-        #h = self.height()
-        #painter.fillRect(0, 0, w, h, QBrush(QColor(255, 255, 255)))
-        #self.displayLines(painter, w / 2, h / 2)
+        #print("Hello, world!")
+        painter = QPainter(self)
+        w = self.width()
+        h = self.height()
+        painter.fillRect(0, 0, w, h, QBrush(QColor(255, 255, 255)))
+        self.displayLines(painter, w / 2, h / 2)
 
     def drawModel(self, b, p, x0, y0):
         s = self.scale
         p.setBrush(QBrush(QColor(180, 230, 180)))
         polygon = QPolygon([
-            QtCore.QPoint(x0 + s*b.p1.x, y0 - s*b.p1.z),
-            QtCore.QPoint(x0 + s*b.p2.x, y0 - s*b.p1.z),
-            QtCore.QPoint(x0 + s*b.p2.x, y0 - s*b.p2.z),
-            QtCore.QPoint(x0 + s*b.p1.x, y0 - s*b.p2.z)
+            QtCore.QPoint(x0 + s*b.p1()[0], y0 - s*b.p1()[2]),
+            QtCore.QPoint(x0 + s*b.p2()[0], y0 - s*b.p1()[2]),
+            QtCore.QPoint(x0 + s*b.p2()[0], y0 - s*b.p2()[2]),
+            QtCore.QPoint(x0 + s*b.p1()[0], y0 - s*b.p2()[2])
             ])
         p.drawConvexPolygon(polygon)
 
@@ -42,7 +42,3 @@ class MainView(QWidget):
         p.setBrush(QBrush(QColor(200, 250, 200)))
         for b in self.Model:
             self.drawModel(b, p, x0, y0)
-        #p.drawConvexPolygon(test) 
-        #p.drawLine(x0, y0, x0 - 50, y0 + 50)
-        #p.drawLine(x0, y0, x0, y0 - 75)
-        #p.drawLine(x0, y0, x0 + 75, y0)
