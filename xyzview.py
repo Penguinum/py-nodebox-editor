@@ -15,7 +15,7 @@ class XYZview(QWidget):
         super(XYZview, self).__init__(parent)
         self.coords = coords
         self.Model = blocks
-        self.scale = 5
+        self.scale = 2
         self.current_block = 0
         self.changing_point = 0
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

@@ -15,8 +15,11 @@ class MainView(QWidget):
     def __init__(self, parent, coords, blocks):
         super(MainView, self).__init__(parent)
         self.Model = blocks
-        self.scale = 5
+        self.scale = 2
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.rotX = 0
+        self.rotY = 0
+        self.rotZ = 0
 
     def paintEvent(self, e):
         #print("Hello, world!")
@@ -26,28 +29,26 @@ class MainView(QWidget):
         painter.fillRect(0, 0, w, h, QBrush(QColor(255, 255, 255)))
         self.displayLines(painter, w / 2, h / 2)
 
+    def mousePressEvent(self, e):
+        print("mouse press event")
+
+    def mouseMoveEvent(self, e):
+        print("mouse move event")
+
+    def wheelEvent(self, e):
+        self.rotZ+=0.1
+        print("wheel event")
+        self.update()
+
     def drawModel(self, b, p, x0, y0):
         s = self.scale
         r1 = math.sin(math.pi/2+0.5)
         r2 = math.cos(math.pi/2+0.5)
         rot_matrix = np.array([
-            #[1,   0,  0, 0],
-            #[0,   1,  0, 0],
-            [ r1,  r2, 0, 0],
-            [-r2,  r1, 0, 0],
+            [math.cos(self.rotZ), math.sin(self.rotZ), 0, 0],
+            [-math.sin(self.rotZ), math.cos(self.rotZ), 0, 0],
             [  0,  0,  1, 0],
             [  0,  0,  0, 1]])
-        rot_matrix2 = np.array([
-            [  1,  0,  0, 0],
-            [  0,  r2,  r1, 0],
-            [  0,  -r1,  r2, 0],
-            [  0,  0,  0, 1]])
-        rot_matrix3 = np.array([
-            [  1,  0,  0, 0],
-            [  0,  1,  0, 0],
-            [  0,  0,  r2, r1],
-            [  0,  0,  -r1, r2]])
-        rot_matrix = rot_matrix.dot(rot_matrix2).dot(rot_matrix)
 
         p1 = b.p1()
         p2 = np.array([b.p1()[0], b.p1()[1], b.p2()[2], 1])

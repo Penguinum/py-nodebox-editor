@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.pbDeleteBox = QPushButton("Delete selected box", self)
         self.slScale = QSlider(self)
         self.slScale.setOrientation(Qt.Horizontal)
-        self.slScale.setRange(5, 15)
+        self.slScale.setRange(2, 15)
         self.pbSwapXY = QPushButton("Swap X and Y", self)
         self.pbSwapXZ = QPushButton("Swap X and Z", self)
         self.pbSwapYZ = QPushButton("Swap Y and Z", self)
