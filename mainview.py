@@ -28,7 +28,6 @@ class MainView(QWidget):
 
     def drawModel(self, b, p, x0, y0):
         s = self.scale
-        p.setBrush(QBrush(QColor(180, 230, 180)))
         r1 = math.sin(math.pi/2+0.5)
         r2 = math.cos(math.pi/2+0.5)
         rot_matrix = np.array([
@@ -78,26 +77,25 @@ class MainView(QWidget):
         p.drawConvexPolygon(polygon)
 
         polygon = QPolygon([
-            QtCore.QPoint(x0 +  s*p4[0], y0 - s*p4[1]),
-            QtCore.QPoint(x0 +  s*p8[0], y0 - s*p8[1]),
-            QtCore.QPoint(x0 +  s*p7[0], y0 - s*p7[1]),
-            QtCore.QPoint(x0 +  s*p3[0], y0 - s*p3[1])
-            ])
-        p.drawConvexPolygon(polygon)
-
-        polygon = QPolygon([
-            QtCore.QPoint(x0 +  s*p3[0], y0 - s*p3[1]),
-            QtCore.QPoint(x0 +  s*p7[0], y0 - s*p7[1]),
+            QtCore.QPoint(x0 +  s*p5[0], y0 - s*p5[1]),
             QtCore.QPoint(x0 +  s*p6[0], y0 - s*p6[1]),
-            QtCore.QPoint(x0 +  s*p2[0], y0 - s*p2[1])
+            QtCore.QPoint(x0 +  s*p7[0], y0 - s*p7[1]),
+            QtCore.QPoint(x0 +  s*p8[0], y0 - s*p8[1])
             ])
         p.drawConvexPolygon(polygon)
+        p.drawLine(x0 + s*p1[0], y0 - s*p1[1],
+                x0 + s*p5[0], y0 - s*p5[1])
+        p.drawLine(x0 + s*p2[0], y0 - s*p2[1],
+                x0 + s*p6[0], y0 - s*p6[1])
+        p.drawLine(x0 + s*p3[0], y0 - s*p3[1],
+                x0 + s*p7[0], y0 - s*p7[1])
+        p.drawLine(x0 + s*p4[0], y0 - s*p4[1],
+                x0 + s*p8[0], y0 - s*p8[1])
 
 
     def displayLines(self, p, x0, y0):
         x0 = self.width() / 2
         y0 = self.height() / 2
         #p.setPen(Qt.NoPen)
-        p.setBrush(QBrush(QColor(200, 250, 200)))
         for b in self.Model:
             self.drawModel(b, p, x0, y0)
