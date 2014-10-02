@@ -7,6 +7,8 @@ except:
     from PyQt4.QtGui import (QWidget, QSizePolicy, QPainter, QBrush, QColor, QPolygon)
     from PyQt4.QtCore import Qt
     from PyQt4 import QtCore
+import numpy as np
+import math
 
 
 class MainView(QWidget):
@@ -27,13 +29,70 @@ class MainView(QWidget):
     def drawModel(self, b, p, x0, y0):
         s = self.scale
         p.setBrush(QBrush(QColor(180, 230, 180)))
+        r1 = math.sin(math.pi/2+0.5)
+        r2 = math.cos(math.pi/2+0.5)
+        rot_matrix = np.array([
+            #[1,   0,  0, 0],
+            #[0,   1,  0, 0],
+            [ r1,  r2, 0, 0],
+            [-r2,  r1, 0, 0],
+            [  0,  0,  1, 0],
+            [  0,  0,  0, 1]])
+        rot_matrix2 = np.array([
+            [  1,  0,  0, 0],
+            [  0,  r2,  r1, 0],
+            [  0,  -r1,  r2, 0],
+            [  0,  0,  0, 1]])
+        rot_matrix3 = np.array([
+            [  1,  0,  0, 0],
+            [  0,  1,  0, 0],
+            [  0,  0,  r2, r1],
+            [  0,  0,  -r1, r2]])
+        rot_matrix = rot_matrix.dot(rot_matrix2).dot(rot_matrix)
+
+        p1 = b.p1()
+        p2 = np.array([b.p1()[0], b.p1()[1], b.p2()[2], 1])
+        p3 = np.array([b.p1()[0], b.p2()[1], b.p2()[2], 1])
+        p4 = np.array([b.p1()[0], b.p2()[1], b.p1()[2], 1])
+        p5 = np.array([b.p2()[0], b.p1()[1], b.p1()[2], 1])
+        p6 = np.array([b.p2()[0], b.p1()[1], b.p2()[2], 1])
+        #p7 = np.array([b.p2()[0], b.p2()[1], b.p2()[2], 1])
+        p7 = b.p2()
+        p8 = np.array([b.p2()[0], b.p2()[1], b.p1()[2], 1])
+
+        p1 = rot_matrix.dot(p1)
+        p2 = rot_matrix.dot(p2)
+        p3 = rot_matrix.dot(p3)
+        p4 = rot_matrix.dot(p4)
+        p5 = rot_matrix.dot(p5)
+        p6 = rot_matrix.dot(p6)
+        p7 = rot_matrix.dot(p7)
+        p8 = rot_matrix.dot(p8)
+
         polygon = QPolygon([
-            QtCore.QPoint(x0 + s*b.p1()[0], y0 - s*b.p1()[2]),
-            QtCore.QPoint(x0 + s*b.p2()[0], y0 - s*b.p1()[2]),
-            QtCore.QPoint(x0 + s*b.p2()[0], y0 - s*b.p2()[2]),
-            QtCore.QPoint(x0 + s*b.p1()[0], y0 - s*b.p2()[2])
+            QtCore.QPoint(x0 +  s*p1[0], y0 - s*p1[1]),
+            QtCore.QPoint(x0 +  s*p2[0], y0 - s*p2[1]),
+            QtCore.QPoint(x0 +  s*p3[0], y0 - s*p3[1]),
+            QtCore.QPoint(x0 +  s*p4[0], y0 - s*p4[1])
             ])
         p.drawConvexPolygon(polygon)
+
+        polygon = QPolygon([
+            QtCore.QPoint(x0 +  s*p4[0], y0 - s*p4[1]),
+            QtCore.QPoint(x0 +  s*p8[0], y0 - s*p8[1]),
+            QtCore.QPoint(x0 +  s*p7[0], y0 - s*p7[1]),
+            QtCore.QPoint(x0 +  s*p3[0], y0 - s*p3[1])
+            ])
+        p.drawConvexPolygon(polygon)
+
+        polygon = QPolygon([
+            QtCore.QPoint(x0 +  s*p3[0], y0 - s*p3[1]),
+            QtCore.QPoint(x0 +  s*p7[0], y0 - s*p7[1]),
+            QtCore.QPoint(x0 +  s*p6[0], y0 - s*p6[1]),
+            QtCore.QPoint(x0 +  s*p2[0], y0 - s*p2[1])
+            ])
+        p.drawConvexPolygon(polygon)
+
 
     def displayLines(self, p, x0, y0):
         x0 = self.width() / 2

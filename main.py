@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
         self.parts = []
         self.miniblocks = []
-        self.centralBlock = [0, 0, 0]
+        self.centralBlock = [0, 0, 0, 1]
         self.createGUI()
         self.createMenu()
         self.connectSlots()
@@ -104,8 +104,8 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
     def addBox(self):
-        self.miniblocks.append(MiniBlock([-8, -8, -8],
-                                                     [8, 8, 8]))
+        self.miniblocks.append(MiniBlock([-8, -8, -8, 1],
+                                                     [8, 8, 8, 1]))
         self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         self.gvX.update()
