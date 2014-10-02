@@ -20,7 +20,7 @@ import sys
 import codegen
 from xyzview import XYZview
 from mainview import MainView
-from point import MiniBlock, Point
+from point import MiniBlock
 
 
 class MainWindow(QMainWindow):
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
         self.parts = []
         self.miniblocks = []
-        self.centralBlock = Point(0, 0, 0)
+        self.centralBlock = [0, 0, 0, 1]
         self.createGUI()
         self.createMenu()
         self.connectSlots()
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
 
     def createGUI(self):
         self.widget = QWidget(self)
-        self.gvMain = MainView(self)
+        self.gvMain = MainView(self, 0, self.miniblocks)
         self.gvX = XYZview(self, "YZ", self.miniblocks)
         self.gvY = XYZview(self, "XZ", self.miniblocks)
         self.gvZ = XYZview(self, "XY", self.miniblocks)
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.pbDeleteBox = QPushButton("Delete selected box", self)
         self.slScale = QSlider(self)
         self.slScale.setOrientation(Qt.Horizontal)
-        self.slScale.setRange(5, 15)
+        self.slScale.setRange(2, 15)
         self.pbSwapXY = QPushButton("Swap X and Y", self)
         self.pbSwapXZ = QPushButton("Swap X and Z", self)
         self.pbSwapYZ = QPushButton("Swap Y and Z", self)
@@ -104,13 +104,14 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
     def addBox(self):
-        self.miniblocks.append(MiniBlock(Point(-8, -8, -8),
-                                                     Point(8, 8, 8)))
+        self.miniblocks.append(MiniBlock([-8, -8, -8, 1],
+                                                     [8, 8, 8, 1]))
         self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         self.gvX.update()
         self.gvY.update()
         self.gvZ.update()
+        self.gvMain.update()
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
         self.gvX.current_block = self.current_block
         self.gvY.current_block = self.current_block
@@ -174,8 +175,8 @@ class MainWindow(QMainWindow):
         if save_as != "":
             output_file = open(save_as, "w+")
             for b in self.miniblocks:
-                output_file.write(" ".join([str(b.p1.x), str(b.p1.z), str(b.p1.y),
-                                 str(b.p2.x), str(b.p2.z), str(b.p2.y)]) + "\n")
+                output_file.write(" ".join([str(b.p1()[0]), str(b.p1()[2]), str(b.p1()[1]),
+                                 str(b.p2()[0]), str(b.p2()[2]), str(b.p2()[1])]) + "\n")
             output_file.close()
 
     def actionOpen(self):
@@ -191,7 +192,7 @@ class MainWindow(QMainWindow):
         self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
-            self.miniblocks.append(MiniBlock(Point(t[0], t[2], t[1]), Point(t[3], t[5], t[4])))
+            self.miniblocks.append(MiniBlock([t[0], t[2], t[1]], [t[3], t[5], t[4]]))
             self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         input_file.close()
         self.update()
@@ -206,36 +207,37 @@ class MainWindow(QMainWindow):
         self.gvX.scale = self.slScale.value()
         self.gvY.scale = self.slScale.value()
         self.gvZ.scale = self.slScale.value()
+        self.gvMain.scale = self.slScale.value()
         self.update()
 
     def swapXY(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x, b.p1.y, b.p2.y = b.p1.y, b.p2.y, b.p1.x, b.p2.x
+            b.swapXY()
         self.update()
 
     def swapXZ(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.x, b.p2.x
+            b.swapXZ()
         self.update()
 
     def swapYZ(self):
         for b in self.miniblocks:
-            b.p1.y, b.p2.y, b.p1.z, b.p2.z = b.p1.z, b.p2.z, b.p1.y, b.p2.y
+            b.swapYZ()
         self.update()
 
     def turnX(self):
         for b in self.miniblocks:
-            b.p1.x, b.p2.x = -b.p1.x, -b.p2.x
+            b.turnX()
         self.update()
 
     def turnY(self):
         for b in self.miniblocks:
-            b.p1.y, b.p2.y = -b.p1.y, -b.p2.y
+            b.turnY()
         self.update()
 
     def turnZ(self):
         for b in self.miniblocks:
-            b.p1.z, b.p2.z = -b.p1.z, -b.p2.z
+            b.turnZ()
         self.update()
 
 def main():
