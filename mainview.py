@@ -15,7 +15,7 @@ class MainView(QWidget):
     def __init__(self, parent, coords, blocks):
         super(MainView, self).__init__(parent)
         self.Model = blocks
-        self.scale = 2
+        self.scale = 5
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.rotX = 0
         self.rotY = 0
@@ -60,15 +60,31 @@ class MainView(QWidget):
             [             0,               0, 0, 1]])
         mx = np.array([
             [ cos(self.rotX), 0, sin(self.rotX), 0],
-            [              0,              1, 0, 0],
+            [              0, 1,              0, 0],
             [-sin(self.rotX), 0, cos(self.rotX), 0],
-            [              0,              0, 0, 1]])
+            [              0, 0,              0, 1]])
         mz = np.array([
             [1,              0,               0, 0],
             [0, cos(self.rotZ), -sin(self.rotZ), 0],
             [0, sin(self.rotZ),  cos(self.rotZ), 0],
             [0,              0,               0, 1]])
         self.rotation = mx.dot(my.dot(mz))
+
+        #alpha = self.rotZ
+        #beta = self.rotX
+        #gamma = self.rotY
+        #self.rotation = np.array([
+            #[cos(alpha)*cos(gamma) - sin(alpha)*cos(beta)*sin(gamma), 
+                #-cos(alpha)*sin(gamma) - sin(alpha)*cos(beta)*cos(gamma),
+                #sin(alpha)*sin(beta), 0],
+            #[sin(alpha)*cos(gamma) + cos(alpha)*cos(beta)*sin(gamma),
+                #-sin(alpha)*sin(gamma) + cos(alpha)*cos(beta)*cos(gamma),
+                #-cos(alpha)*sin(beta), 0],
+            #[sin(beta)*sin(gamma),
+                #sin(beta)*cos(gamma),
+                #cos(beta), 0],
+            #[0, 0, 0, 1]
+            #])
 
     def drawModel(self, b, p, x0, y0):
         s = self.scale
@@ -94,7 +110,7 @@ class MainView(QWidget):
         p7 = self.rotation.dot(p7)
         p8 = self.rotation.dot(p8)
 
-        c1,c2 = 0, 1
+        c1, c2 = 0, 1
         polygon = QPolygon([
             QtCore.QPoint(x0 +  s*p1[c1], y0 - s*p1[c2]),
             QtCore.QPoint(x0 +  s*p2[c1], y0 - s*p2[c2]),

@@ -49,6 +49,7 @@ class MainWindow(QMainWindow):
         self.slScale = QSlider(self)
         self.slScale.setOrientation(Qt.Horizontal)
         self.slScale.setRange(2, 15)
+        self.slScale.setValue(5)
         self.pbSwapXY = QPushButton("Swap X and Y", self)
         self.pbSwapXZ = QPushButton("Swap X and Z", self)
         self.pbSwapYZ = QPushButton("Swap Y and Z", self)
@@ -189,10 +190,11 @@ class MainWindow(QMainWindow):
         self.gvX.current_block = 0
         self.gvY.current_block = 0
         self.gvZ.current_block = 0
+        self.gvMain.current_block = 0
         self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
-            self.miniblocks.append(MiniBlock([t[0], t[2], t[1]], [t[3], t[5], t[4]]))
+            self.miniblocks.append(MiniBlock([t[0], t[2], t[1], 1], [t[3], t[5], t[4], 1]))
             self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         input_file.close()
         self.update()
