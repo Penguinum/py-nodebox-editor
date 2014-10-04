@@ -30,6 +30,7 @@ class MainWindow(QMainWindow):
         self.parts = []
         self.miniblocks = []
         self.centralBlock = [0, 0, 0, 1]
+        self.resolution = 16
         self.createGUI()
         self.createMenu()
         self.connectSlots()
@@ -109,14 +110,9 @@ class MainWindow(QMainWindow):
                                                      [8, 8, 8, 1]))
         self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
-        self.gvX.update()
-        self.gvY.update()
-        self.gvZ.update()
-        self.gvMain.update()
+        self.update()
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
-        self.gvX.current_block = self.current_block
-        self.gvY.current_block = self.current_block
-        self.gvZ.current_block = self.current_block
+        self.sendCurrentBlock(self.current_block)
 
     def deleteBox(self):
         if self.cbSelectBox.count() != 0:
@@ -128,9 +124,7 @@ class MainWindow(QMainWindow):
             except:
                 self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         if len(self.miniblocks) == 0:
-            self.gvX.current_block = 0
-            self.gvY.current_block = 0
-            self.gvZ.current_block = 0
+            self.sendCurrentBlock(0)
         self.update()
 
     def connectSlots(self):
@@ -154,9 +148,7 @@ class MainWindow(QMainWindow):
         self.miniblocks.clear()
         self.current_block = 0
         self.cbSelectBox.clear()
-        self.gvX.current_block = 0
-        self.gvY.current_block = 0
-        self.gvZ.current_block = 0
+        self.sendCurrentBlock(0)
         self.update()
 
     def actionExport(self):
@@ -180,6 +172,18 @@ class MainWindow(QMainWindow):
                                  str(b.p2()[0]), str(b.p2()[2]), str(b.p2()[1])]) + "\n")
             output_file.close()
 
+    def sendCurrentBlock(self, block):
+        self.gvX.current_block =    block
+        self.gvY.current_block =    block
+        self.gvZ.current_block =    block
+        #self.gvMain.current_block = block
+
+    def sendScale(self, scale):
+        self.gvX.scale    = scale
+        self.gvY.scale    = scale
+        self.gvZ.scale    = scale
+        self.gvMain.scale = scale
+
     def actionOpen(self):
         if is_qt5:
             open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
@@ -187,10 +191,7 @@ class MainWindow(QMainWindow):
             open_from = QFileDialog.getOpenFileName(self, "Open file")
         input_file = open(open_from, "r")
         self.miniblocks.clear()
-        self.gvX.current_block = 0
-        self.gvY.current_block = 0
-        self.gvZ.current_block = 0
-        self.gvMain.current_block = 0
+        self.sendCurrentBlock(0)
         self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
@@ -201,15 +202,10 @@ class MainWindow(QMainWindow):
 
     def cbSwitch(self):
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
-        self.gvX.current_block = self.current_block
-        self.gvY.current_block = self.current_block
-        self.gvZ.current_block = self.current_block
+        self.sendCurrentBlock(self.current_block)
 
     def slScaleChange(self):
-        self.gvX.scale = self.slScale.value()
-        self.gvY.scale = self.slScale.value()
-        self.gvZ.scale = self.slScale.value()
-        self.gvMain.scale = self.slScale.value()
+        self.sendScale(self.slScale.value())
         self.update()
 
     def swapXY(self):
