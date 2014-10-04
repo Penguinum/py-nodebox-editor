@@ -17,6 +17,7 @@ class MainView(QWidget):
         self.Model = blocks
         self.scale = 5
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.resolution = 16
         self.rotX = 0
         self.rotY = 0
         self.rotZ = 0

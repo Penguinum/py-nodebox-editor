@@ -16,6 +16,7 @@ class XYZview(QWidget):
         self.coords = coords
         self.Model = blocks
         self.scale = 5
+        self.resolution = 16
         self.current_block = 0
         self.changing_point = 0
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

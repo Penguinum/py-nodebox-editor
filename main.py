@@ -184,6 +184,12 @@ class MainWindow(QMainWindow):
         self.gvZ.scale    = scale
         self.gvMain.scale = scale
 
+    def sendResolution(self, resolution):
+        self.gvX.resolution    = resolution
+        self.gvY.resolution    = resolution
+        self.gvZ.resolution    = resolution
+        self.gvMain.resolution = resolution
+
     def actionOpen(self):
         if is_qt5:
             open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
