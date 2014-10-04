@@ -209,6 +209,7 @@ class MainWindow(QMainWindow):
     def cbSwitch(self):
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
         self.sendCurrentBlock(self.current_block)
+        self.update()
 
     def slScaleChange(self):
         self.sendScale(self.slScale.value())
