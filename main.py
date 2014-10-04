@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.connectSlots()
         self.project_file = ""
         self.current_block = 0
+        self.block_count = 0
 
 
     def createGUI(self):
@@ -108,7 +109,8 @@ class MainWindow(QMainWindow):
     def addBox(self):
         self.miniblocks.append(MiniBlock([-8, -8, -8, 1],
                                                      [8, 8, 8, 1]))
-        self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
+        self.block_count += 1 # BTW, we will not decrease this value
+        self.cbSelectBox.addItems(["Block" + str(self.block_count)])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
         self.update()
         self.current_block = self.miniblocks[self.cbSelectBox.currentIndex()]
@@ -119,12 +121,13 @@ class MainWindow(QMainWindow):
             idx = self.cbSelectBox.currentIndex()
             del self.miniblocks[idx]
             self.cbSelectBox.removeItem(idx)
-            try:
-                self.cbSelectBox.setCurrentIndex(idx-1)
-            except:
-                self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
-        if len(self.miniblocks) == 0:
-            self.sendCurrentBlock(0)
+            if self.cbSelectBox.count() != 0:
+                self.cbSelectBox.setCurrentIndex(0)
+                self.current_block = self.miniblocks[0]
+                self.sendCurrentBlock(self.current_block)
+            else:
+                self.current_block = 0;
+                self.sendCurrentBlock(0)
         self.update()
 
     def connectSlots(self):
