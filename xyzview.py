@@ -11,7 +11,7 @@ import numpy as np
 
 
 class XYZview(QWidget):
-    def __init__(self, parent, blocks):
+    def __init__(self, parent, blocks, coords):
         super(XYZview, self).__init__(parent)
         self.Model = blocks
         self.scale = 5
@@ -19,8 +19,8 @@ class XYZview(QWidget):
         self.current_block = 0
         self.changing_point = 0
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.coord1 = 0
-        self.coord2 = 0
+        self.coord1 = "XYZ".find(coords[0])
+        self.coord2 = "XYZ".find(coords[1])
 
     def paintEvent(self, e):
         painter = QPainter(self)
@@ -126,21 +126,3 @@ class XYZview(QWidget):
         elif self.changing_point == 5:
             print("something")
         self.parent().update()
-
-class XYview(XYZview):
-    def __init__(self, parent, blocks):
-        super(XYview, self).__init__(parent, blocks)
-        self.coord1 = 1
-        self.coord2 = 0
-
-class YZview(XYZview):
-    def __init__(self, parent, blocks):
-        super(YZview, self).__init__(parent, blocks)
-        self.coord1 = 2
-        self.coord2 = 1
-
-class ZXview(XYZview):
-    def __init__(self, parent, blocks):
-        super(ZXview, self).__init__(parent, blocks)
-        self.coord1 = 0
-        self.coord2 = 2

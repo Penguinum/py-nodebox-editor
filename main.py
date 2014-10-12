@@ -42,9 +42,9 @@ class MainWindow(QMainWindow):
     def createGUI(self):
         self.widget = QWidget(self)
         self.gvMain = MainView(self, 0, self.miniblocks)
-        self.gvX = YZview(self,self.miniblocks)
-        self.gvY = ZXview(self,self.miniblocks)
-        self.gvZ = XYview(self,self.miniblocks)
+        self.gvX = XYZview(self,self.miniblocks, "YZ")
+        self.gvY = XYZview(self,self.miniblocks, "ZX")
+        self.gvZ = XYZview(self,self.miniblocks, "XY")
         self.cbSelectBox = QComboBox(self)
         self.pbAddBox = QPushButton("Add Box", self)
         self.pbDeleteBox = QPushButton("Delete selected box", self)
