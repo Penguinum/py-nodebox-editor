@@ -11,9 +11,8 @@ import numpy as np
 
 
 class XYZview(QWidget):
-    def __init__(self, parent, coords, blocks):
+    def __init__(self, parent, blocks):
         super(XYZview, self).__init__(parent)
-        self.coords = coords
         self.Model = blocks
         self.scale = 5
         self.resolution = 16
@@ -54,15 +53,8 @@ class XYZview(QWidget):
         p.drawLine(x0, y0, x0, 0)
         p.drawLine(x0, y0, w, y0)
         p.setPen(QPen(QColor(50, 50, 50), 2))
-        if self.coords == "XY":
-            p.drawText(QPoint(w/2, 10), "Y")
-            p.drawText(QPoint(w-10, h/2), "X")
-        elif self.coords == "YZ":
-            p.drawText(QPoint(w/2, 10), "Y")
-            p.drawText(QPoint(w-10, h/2), "Z")
-        elif self.coords == "XZ":
-            p.drawText(QPoint(w/2, 10), "Z")
-            p.drawText(QPoint(w-10, h/2), "X")
+        p.drawText(QPoint(w/2, 10), "XZY"[self.coord1])
+        p.drawText(QPoint(w-10, h/2), "XZY"[self.coord2])
         p.setPen(QPen(QColor(200, 200, 200), 2))
         p.drawRect(x0 - self.scale*8, y0 - self.scale*8,
                    self.scale*16, self.scale*16)
@@ -136,19 +128,19 @@ class XYZview(QWidget):
         self.parent().update()
 
 class XYview(XYZview):
-    def __init__(self, parent, coords, blocks):
-        super(XYview, self).__init__(parent, coords, blocks)
+    def __init__(self, parent, blocks):
+        super(XYview, self).__init__(parent, blocks)
         self.coord1 = 0
         self.coord2 = 1
 
 class YZview(XYZview):
-    def __init__(self, parent, coords, blocks):
-        super(YZview, self).__init__(parent, coords, blocks)
+    def __init__(self, parent, blocks):
+        super(YZview, self).__init__(parent, blocks)
         self.coord1 = 1
         self.coord2 = 2
 
 class ZXview(XYZview):
-    def __init__(self, parent, coords, blocks):
-        super(ZXview, self).__init__(parent, coords, blocks)
+    def __init__(self, parent, blocks):
+        super(ZXview, self).__init__(parent, blocks)
         self.coord1 = 2
         self.coord2 = 0
