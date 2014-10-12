@@ -152,6 +152,7 @@ class MainWindow(QMainWindow):
         self.current_block = 0
         self.cbSelectBox.clear()
         self.sendCurrentBlock(0)
+        self.block_count = 0
         self.update()
 
     def actionExport(self):
