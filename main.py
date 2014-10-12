@@ -18,7 +18,7 @@ except:
 
 import sys
 import codegen
-from xyzview import XYZview
+from xyzview import *
 from mainview import MainView
 from point import MiniBlock
 
@@ -42,9 +42,9 @@ class MainWindow(QMainWindow):
     def createGUI(self):
         self.widget = QWidget(self)
         self.gvMain = MainView(self, 0, self.miniblocks)
-        self.gvX = XYZview(self, "YZ", self.miniblocks)
-        self.gvY = XYZview(self, "XZ", self.miniblocks)
-        self.gvZ = XYZview(self, "XY", self.miniblocks)
+        self.gvX = YZview(self, "YZ", self.miniblocks)
+        self.gvY = ZXview(self, "XZ", self.miniblocks)
+        self.gvZ = XYview(self, "XY", self.miniblocks)
         self.cbSelectBox = QComboBox(self)
         self.pbAddBox = QPushButton("Add Box", self)
         self.pbDeleteBox = QPushButton("Delete selected box", self)
