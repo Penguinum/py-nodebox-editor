@@ -53,8 +53,8 @@ class XYZview(QWidget):
         p.drawLine(x0, y0, x0, 0)
         p.drawLine(x0, y0, w, y0)
         p.setPen(QPen(QColor(50, 50, 50), 2))
-        p.drawText(QPoint(w/2, 10), "XZY"[self.coord1])
-        p.drawText(QPoint(w-10, h/2), "XZY"[self.coord2])
+        p.drawText(QPoint(w/2, 10), "XYZ"[self.coord2])
+        p.drawText(QPoint(w-10, h/2), "XYZ"[self.coord1])
         p.setPen(QPen(QColor(200, 200, 200), 2))
         p.drawRect(x0 - self.scale*8, y0 - self.scale*8,
                    self.scale*16, self.scale*16)
@@ -130,17 +130,17 @@ class XYZview(QWidget):
 class XYview(XYZview):
     def __init__(self, parent, blocks):
         super(XYview, self).__init__(parent, blocks)
-        self.coord1 = 0
-        self.coord2 = 1
+        self.coord1 = 1
+        self.coord2 = 0
 
 class YZview(XYZview):
     def __init__(self, parent, blocks):
         super(YZview, self).__init__(parent, blocks)
-        self.coord1 = 1
-        self.coord2 = 2
+        self.coord1 = 2
+        self.coord2 = 1
 
 class ZXview(XYZview):
     def __init__(self, parent, blocks):
         super(ZXview, self).__init__(parent, blocks)
-        self.coord1 = 2
-        self.coord2 = 0
+        self.coord1 = 0
+        self.coord2 = 2

@@ -80,7 +80,6 @@ class MainWindow(QMainWindow):
         self.vbRightLayout.addWidget(self.pbTurnY)
         self.vbRightLayout.addWidget(self.pbTurnZ)
 
-
         self.hbMainLayout = QHBoxLayout()
         self.hbMainLayout.addLayout(self.grLayout, 10)
         self.hbMainLayout.addLayout(self.vbRightLayout, 1)
