@@ -3,7 +3,8 @@ try:
     from PyQt5.QtGui import (QPainter, QBrush, QPen, QColor)
     from PyQt5.QtCore import (QPoint)
 except:
-    from PyQt4.QtGui import (QPainter, QBrush, QPen, QColor, QWidget, QSizePolicy)
+    from PyQt4.QtGui import (QPainter, QBrush, QPen, QColor,
+            QWidget, QSizePolicy)
     from PyQt4.QtCore import (QPoint)
 
 from point import MiniBlock
@@ -66,14 +67,18 @@ class XYZview(QWidget):
         for b in self.Model:
             if b == self.current_block:
                 pass
-            p.drawRect(x0 + scale*b.p1()[self.coord1], y0 - scale*b.p1()[self.coord2],
-                       scale*b.p2()[self.coord1]-scale*b.p1()[self.coord1], scale*b.p1()[self.coord2]-scale*b.p2()[self.coord2])
+            p.drawRect(x0 + scale*b.p1()[self.coord1],
+                    y0 - scale*b.p1()[self.coord2],
+                    scale*b.p2()[self.coord1] - scale*b.p1()[self.coord1],
+                    scale*b.p1()[self.coord2] - scale*b.p2()[self.coord2])
         p.setPen(QPen(QColor(50, 150, 50), 2))
 
         if self.current_block != 0:
             b = self.current_block
-            p.drawRect(x0 + scale*b.p1()[self.coord1], y0 - scale*b.p1()[self.coord2],
-                       scale*b.p2()[self.coord1]-scale*b.p1()[self.coord1], scale*b.p1()[self.coord2]-scale*b.p2()[self.coord2])
+            p.drawRect(x0 + scale*b.p1()[self.coord1],
+                    y0 - scale*b.p1()[self.coord2],
+                    scale*b.p2()[self.coord1] - scale*b.p1()[self.coord1],
+                    scale*b.p1()[self.coord2] - scale*b.p2()[self.coord2])
 
     def mousePressEvent(self, e):
         if self.current_block == 0:

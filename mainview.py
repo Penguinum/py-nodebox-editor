@@ -5,7 +5,8 @@ try:
     from PyQt5 import QtCore
     is_qt5 = True
 except:
-    from PyQt4.QtGui import (QWidget, QSizePolicy, QPainter, QBrush, QColor, QPolygon)
+    from PyQt4.QtGui import (QWidget, QSizePolicy,
+            QPainter, QBrush, QColor, QPolygon)
     from PyQt4.QtCore import Qt
     from PyQt4 import QtCore
     is_qt5 = False
@@ -76,22 +77,6 @@ class MainView(QWidget):
             [0,              0,               0, 1]])
         self.rotation = mx.dot(my.dot(mz))
 
-        #alpha = self.rotZ
-        #beta = self.rotX
-        #gamma = self.rotY
-        #self.rotation = np.array([
-            #[cos(alpha)*cos(gamma) - sin(alpha)*cos(beta)*sin(gamma), 
-                #-cos(alpha)*sin(gamma) - sin(alpha)*cos(beta)*cos(gamma),
-                #sin(alpha)*sin(beta), 0],
-            #[sin(alpha)*cos(gamma) + cos(alpha)*cos(beta)*sin(gamma),
-                #-sin(alpha)*sin(gamma) + cos(alpha)*cos(beta)*cos(gamma),
-                #-cos(alpha)*sin(beta), 0],
-            #[sin(beta)*sin(gamma),
-                #sin(beta)*cos(gamma),
-                #cos(beta), 0],
-            #[0, 0, 0, 1]
-            #])
-
     def drawModel(self, b, p, x0, y0):
         s = self.scale
         r1 = sin(pi/2+0.5)
@@ -103,7 +88,6 @@ class MainView(QWidget):
         p4 = np.array([b.p1()[0], b.p2()[1], b.p1()[2], 1])
         p5 = np.array([b.p2()[0], b.p1()[1], b.p1()[2], 1])
         p6 = np.array([b.p2()[0], b.p1()[1], b.p2()[2], 1])
-        #p7 = np.array([b.p2()[0], b.p2()[1], b.p2()[2], 1])
         p7 = b.p2()
         p8 = np.array([b.p2()[0], b.p2()[1], b.p1()[2], 1])
 
@@ -145,6 +129,5 @@ class MainView(QWidget):
     def displayLines(self, p, x0, y0):
         x0 = self.width() / 2
         y0 = self.height() / 2
-        #p.setPen(Qt.NoPen)
         for b in self.Model:
             self.drawModel(b, p, x0, y0)

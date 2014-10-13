@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
 try:
-    from PyQt5.QtWidgets import (QPushButton, QGridLayout, QWidget, QApplication,
-                                 QLabel, QMenuBar, QVBoxLayout,
-                                 QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
-                                 QSpacerItem, QSizePolicy, QSlider)
+    from PyQt5.QtWidgets import (QPushButton, QGridLayout,
+            QWidget, QApplication, QLabel, QMenuBar, QVBoxLayout,
+            QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+            QSpacerItem, QSizePolicy, QSlider)
     from PyQt5.QtCore import Qt
     is_qt5 = True
 except:
     from PyQt4.QtGui import (QPushButton, QGridLayout, QWidget, QApplication,
-                                 QLabel, QMenuBar, QVBoxLayout,
-                                 QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
-                                 QSpacerItem, QSizePolicy, QSlider)
+            QLabel, QMenuBar, QVBoxLayout,
+            QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+            QSpacerItem, QSizePolicy, QSlider)
 
     from PyQt4.QtCore import Qt
     is_qt5 = False
@@ -171,15 +171,15 @@ class MainWindow(QMainWindow):
         if save_as != "":
             output_file = open(save_as, "w+")
             for b in self.miniblocks:
-                output_file.write(" ".join([str(b.p1()[0]), str(b.p1()[2]), str(b.p1()[1]),
-                                 str(b.p2()[0]), str(b.p2()[2]), str(b.p2()[1])]) + "\n")
+                output_file.write(" ".join([
+                    str(b.p1()[0]), str(b.p1()[2]), str(b.p1()[1]),
+                    str(b.p2()[0]), str(b.p2()[2]), str(b.p2()[1])]) + "\n")
             output_file.close()
 
     def sendCurrentBlock(self, block):
         self.gvX.current_block =    block
         self.gvY.current_block =    block
         self.gvZ.current_block =    block
-        #self.gvMain.current_block = block
 
     def sendScale(self, scale):
         self.gvX.scale    = scale
@@ -204,7 +204,8 @@ class MainWindow(QMainWindow):
         self.cbSelectBox.clear()
         for line in input_file:
             t = [int(token) for token in line.split(" ")]
-            self.miniblocks.append(MiniBlock([t[0], t[2], t[1], 1], [t[3], t[5], t[4], 1]))
+            self.miniblocks.append(MiniBlock([t[0], t[2], t[1], 1],
+                [t[3], t[5], t[4], 1]))
             self.cbSelectBox.addItems(["Block" + str(len(self.miniblocks))])
         input_file.close()
         self.update()
