@@ -3,11 +3,11 @@ import point
 
 
 class codegen:
-    def __init__(self, filename, nodename, miniblocks):
+    def __init__(self, filename, nodename, miniblocks, resolution):
         self.filename = filename
         self.nodename = nodename
         self.miniblocks = miniblocks
-        self.scaling = 16.0
+        self.scaling = resolution
         self.head = [
             "-- Generated code\n\n",
             "minetest.register_node(\"yourmode:yournode\", {\n",
@@ -20,7 +20,6 @@ class codegen:
             "\t\t\"picture.png\",\n",
             "\t},\n",
             "\tdrawtype = \"nodebox\",\n",
-            "\tparamtype = \"light\",\n",
             "\tnode_box = {\n",
             "\t\ttype=\"fixed\",\n",
             "\t\tfixed={\n"
@@ -28,7 +27,7 @@ class codegen:
         self.tail = [
         	"\t\t}\n",
             "\t},\n",
-            "\tgroups={oddly_breakable_by_hand=2}\n",
+            "\tgroups={oddly_breakable_by_hand=3}\n",
             "})\n"
             ]
 
@@ -40,7 +39,7 @@ class codegen:
             output_file.write(line)
         for b in self.miniblocks:
             output_file.write("\t\t\t{" + ", ".join([
-                str(b.p1()[0]/s), str(b.p1()[2]/s), str(b.p1()[1]/s), 
+                str(b.p1()[0]/s), str(b.p1()[2]/s), str(b.p1()[1]/s),
                 str(b.p2()[0]/s), str(b.p2()[2]/s), str(b.p2()[1]/s)]) + "},\n")
         for line in self.tail:
             output_file.write(line)

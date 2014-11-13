@@ -6,7 +6,7 @@ try:
             QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
             QSpacerItem, QSizePolicy, QSlider)
     from PyQt5.QtCore import Qt
-    is_qt5 = True
+    using_qt5 = True
 except:
     from PyQt4.QtGui import (QPushButton, QGridLayout, QWidget, QApplication,
             QLabel, QMenuBar, QVBoxLayout,
@@ -14,7 +14,7 @@ except:
             QSpacerItem, QSizePolicy, QSlider)
 
     from PyQt4.QtCore import Qt
-    is_qt5 = False
+    using_qt5 = False
 
 import sys
 import codegen
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.widget = QWidget(self)
         self.gvMain = MainView(self, 0, self.miniblocks)
         self.gvX = XYZview(self,self.miniblocks, "YZ")
-        self.gvY = XYZview(self,self.miniblocks, "ZX")
+        self.gvY = XYZview(self,self.miniblocks, "XZ")
         self.gvZ = XYZview(self,self.miniblocks, "XY")
         self.cbSelectBox = QComboBox(self)
         self.pbAddBox = QPushButton("Add Box", self)
@@ -52,6 +52,10 @@ class MainWindow(QMainWindow):
         self.slScale.setOrientation(Qt.Horizontal)
         self.slScale.setRange(2, 15)
         self.slScale.setValue(5)
+        self.slResolution = QSlider(self)
+        self.slResolution.setOrientation(Qt.Horizontal)
+        self.slResolution.setRange(1, 6) # resolution is 2**this_value
+        self.slResolution.setValue(4) # 2**4 is 16 -- initial resolution
         self.pbSwapXY = QPushButton("Swap X and Y", self)
         self.pbSwapXZ = QPushButton("Swap X and Z", self)
         self.pbSwapYZ = QPushButton("Swap Y and Z", self)
@@ -71,6 +75,7 @@ class MainWindow(QMainWindow):
         self.vbRightLayout.addWidget(self.pbDeleteBox)
         self.vbRightLayout.addWidget(QLabel("Scale"))
         self.vbRightLayout.addWidget(self.slScale)
+        self.vbRightLayout.addWidget(self.slResolution)
         self.vbRightLayout.addItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.vbRightLayout.addWidget(self.pbSwapXY)
@@ -90,7 +95,7 @@ class MainWindow(QMainWindow):
         self.grLayout.addWidget(self.gvZ, 3, 1)
         self.widget.setLayout(self.hbMainLayout)
         self.setCentralWidget(self.widget)
-        self.setWindowTitle("CubeMaker")
+        self.setWindowTitle("Py-Enditor")
         self.resize(1000, 600)
 
     def createMenu(self):
@@ -138,6 +143,7 @@ class MainWindow(QMainWindow):
         self.pbDeleteBox.clicked.connect(self.deleteBox)
         self.cbSelectBox.activated.connect(self.cbSwitch)
         self.slScale.valueChanged.connect(self.slScaleChange)
+        self.slResolution.valueChanged.connect(self.slResolutionChange)
         self.aOpen.triggered.connect(self.actionOpen)
         self.pbSwapXY.clicked.connect(self.swapXY)
         self.pbSwapXZ.clicked.connect(self.swapXZ)
@@ -155,16 +161,16 @@ class MainWindow(QMainWindow):
         self.update()
 
     def actionExport(self):
-        if is_qt5:
+        if using_qt5:
             export_as = QFileDialog.getSaveFileName(self, "Export as...")[0]
         else:
             export_as = QFileDialog.getSaveFileName(self, "Export as...")
-        create_code = codegen.codegen(self, "mynode", self.miniblocks)
+        create_code = codegen.codegen(self, "mynode", self.miniblocks, self.resolution)
         if export_as != "":
             create_code.writeToFile(export_as)
 
     def actionSave(self):
-        if is_qt5:
+        if using_qt5:
             save_as = QFileDialog.getSaveFileName(self, "Save as...")[0]
         else:
             save_as = QFileDialog.getSaveFileName(self, "Save as...")
@@ -194,7 +200,7 @@ class MainWindow(QMainWindow):
         self.gvMain.resolution = resolution
 
     def actionOpen(self):
-        if is_qt5:
+        if using_qt5:
             open_from = QFileDialog.getOpenFileName(self, "Open file")[0]
         else:
             open_from = QFileDialog.getOpenFileName(self, "Open file")
@@ -217,6 +223,10 @@ class MainWindow(QMainWindow):
 
     def slScaleChange(self):
         self.sendScale(self.slScale.value())
+        self.update()
+
+    def slResolutionChange(self):
+        self.sendResolution(2**self.slResolution.value())
         self.update()
 
     def swapXY(self):

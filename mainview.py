@@ -3,13 +3,13 @@ try:
     from PyQt5.QtGui import (QPainter, QBrush, QColor, QPolygon)
     from PyQt5.QtCore import Qt
     from PyQt5 import QtCore
-    is_qt5 = True
+    using_qt5 = True
 except:
     from PyQt4.QtGui import (QWidget, QSizePolicy,
             QPainter, QBrush, QColor, QPolygon)
     from PyQt4.QtCore import Qt
     from PyQt4 import QtCore
-    is_qt5 = False
+    using_qt5 = False
 import numpy as np
 from math import sin, cos, pi
 
@@ -31,7 +31,6 @@ class MainView(QWidget):
             [0, 0, 0, 1]])
 
     def paintEvent(self, e):
-        #print("Hello, world!")
         painter = QPainter(self)
         w = self.width()
         h = self.height()
@@ -52,7 +51,7 @@ class MainView(QWidget):
         self.update()
 
     def wheelEvent(self, e):
-        if is_qt5:
+        if using_qt5:
             self.rotY+=e.angleDelta().y()*0.001
         else:
             self.rotY+=e.delta()*0.001

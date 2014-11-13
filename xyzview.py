@@ -57,8 +57,9 @@ class XYZview(QWidget):
         p.drawText(QPoint(w/2, 10), "XYZ"[self.coord2])
         p.drawText(QPoint(w-10, h/2), "XYZ"[self.coord1])
         p.setPen(QPen(QColor(200, 200, 200), 2))
-        p.drawRect(x0 - self.scale*8, y0 - self.scale*8,
-                   self.scale*16, self.scale*16)
+        r = self.resolution
+        p.drawRect(x0 - self.scale*r/2, y0 - self.scale*r/2,
+                   self.scale*r, self.scale*r)
 
     def drawModel(self, p, w, h):
         scale = self.scale
