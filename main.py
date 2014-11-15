@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
         self.vbRightLayout.addWidget(self.pbDeleteBox)
         self.vbRightLayout.addWidget(QLabel("Scale"))
         self.vbRightLayout.addWidget(self.slScale)
+        self.vbRightLayout.addWidget(QLabel("Resolution"))
         self.vbRightLayout.addWidget(self.slResolution)
         self.vbRightLayout.addItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -198,6 +199,7 @@ class MainWindow(QMainWindow):
         self.gvY.resolution    = resolution
         self.gvZ.resolution    = resolution
         self.gvMain.resolution = resolution
+        self.resolution        = resolution
 
     def actionOpen(self):
         if using_qt5:

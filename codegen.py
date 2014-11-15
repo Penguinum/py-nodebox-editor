@@ -23,17 +23,17 @@ class codegen:
             "\tnode_box = {\n",
             "\t\ttype=\"fixed\",\n",
             "\t\tfixed={\n"
-            ]
+        ]
         self.tail = [
-        	"\t\t}\n",
+       	    "\t\t}\n",
             "\t},\n",
             "\tgroups={oddly_breakable_by_hand=3}\n",
             "})\n"
-            ]
-
+        ]
 
     def writeToFile(self, export_as):
         s = self.scaling
+        print(s)
         output_file = open(export_as, "w+")
         for line in self.head:
             output_file.write(line)

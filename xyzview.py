@@ -73,7 +73,6 @@ class XYZview(QWidget):
                     scale*b.p2()[self.coord1] - scale*b.p1()[self.coord1],
                     scale*b.p1()[self.coord2] - scale*b.p2()[self.coord2])
         p.setPen(QPen(QColor(50, 150, 50), 2))
-
         if self.current_block != 0:
             b = self.current_block
             p.drawRect(x0 + scale*b.p1()[self.coord1],
@@ -111,8 +110,7 @@ class XYZview(QWidget):
                 self.changing_point = 0
             return
         else:
-            self.changing_point = 5
-
+            self.changing_point = 5 # no point selected
 
     def mouseMoveEvent(self, e):
         c1 = int((e.pos().x() - self.x0) / self.scale)
