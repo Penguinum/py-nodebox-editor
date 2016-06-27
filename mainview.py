@@ -130,3 +130,4 @@ class MainView(QWidget):
         y0 = self.height() / 2
         for b in self.Model:
             self.drawModel(b, p, x0, y0)
+

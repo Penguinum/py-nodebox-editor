@@ -44,3 +44,4 @@ class codegen:
         for line in self.tail:
             output_file.write(line)
         output_file.close()
+

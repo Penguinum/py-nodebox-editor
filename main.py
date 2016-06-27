@@ -2,17 +2,16 @@
 
 try:
     from PyQt5.QtWidgets import (QPushButton, QGridLayout,
-            QWidget, QApplication, QLabel, QMenuBar, QVBoxLayout,
-            QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
-            QSpacerItem, QSizePolicy, QSlider)
+        QWidget, QApplication, QLabel, QMenuBar, QVBoxLayout,
+        QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+        QSpacerItem, QSizePolicy, QSlider)
     from PyQt5.QtCore import Qt
     using_qt5 = True
 except:
-    from PyQt4.QtGui import (QPushButton, QGridLayout, QWidget, QApplication,
-            QLabel, QMenuBar, QVBoxLayout,
-            QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
-            QSpacerItem, QSizePolicy, QSlider)
-
+    from PyQt4.QtGui import (QPushButton, QGridLayout,
+        QWidget, QApplication, QLabel, QMenuBar, QVBoxLayout,
+        QHBoxLayout, QMainWindow, QFileDialog, QComboBox,
+        QSpacerItem, QSizePolicy, QSlider)
     from PyQt4.QtCore import Qt
     using_qt5 = False
 
@@ -21,12 +20,12 @@ import codegen
 from xyzview import *
 from mainview import MainView
 from point import MiniBlock
+from functools import partial
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-
         self.parts = []
         self.miniblocks = []
         self.centralBlock = [0, 0, 0, 1]
@@ -37,7 +36,6 @@ class MainWindow(QMainWindow):
         self.project_file = ""
         self.current_block = 0
         self.block_count = 0
-
 
     def createGUI(self):
         self.widget = QWidget(self)
@@ -56,12 +54,12 @@ class MainWindow(QMainWindow):
         self.slResolution.setOrientation(Qt.Horizontal)
         self.slResolution.setRange(1, 6) # resolution is 2**this_value
         self.slResolution.setValue(4) # 2**4 is 16 -- initial resolution
-        self.pbSwapXY = QPushButton("Swap X and Y", self)
-        self.pbSwapXZ = QPushButton("Swap X and Z", self)
-        self.pbSwapYZ = QPushButton("Swap Y and Z", self)
-        self.pbTurnX  = QPushButton("Turn X", self)
-        self.pbTurnY  = QPushButton("Turn Y", self)
-        self.pbTurnZ  = QPushButton("Turn Z", self)
+        self.turn_buttons = {'x': QPushButton("Turn around X axis", self),
+                             'y': QPushButton("Turn around Y axis", self),
+                             'z': QPushButton("Turn around Z axis", self)}
+        self.swap_buttons = {'xy': QPushButton("Swap X and Y", self),
+                             'yz': QPushButton("Swap Y and Z", self),
+                             'zx': QPushButton("Swap Z and X", self)}
         self.grLayout = QGridLayout()
         self.grLayout.addWidget(QLabel("Main view"), 0, 0)
         self.grLayout.addWidget(self.gvMain, 1, 0)
@@ -79,12 +77,10 @@ class MainWindow(QMainWindow):
         self.vbRightLayout.addWidget(self.slResolution)
         self.vbRightLayout.addItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        self.vbRightLayout.addWidget(self.pbSwapXY)
-        self.vbRightLayout.addWidget(self.pbSwapXZ)
-        self.vbRightLayout.addWidget(self.pbSwapYZ)
-        self.vbRightLayout.addWidget(self.pbTurnX)
-        self.vbRightLayout.addWidget(self.pbTurnY)
-        self.vbRightLayout.addWidget(self.pbTurnZ)
+        for button in self.swap_buttons.values():
+            self.vbRightLayout.addWidget(button)
+        for button in self.turn_buttons.values():
+            self.vbRightLayout.addWidget(button)
 
         self.hbMainLayout = QHBoxLayout()
         self.hbMainLayout.addLayout(self.grLayout, 10)
@@ -96,7 +92,7 @@ class MainWindow(QMainWindow):
         self.grLayout.addWidget(self.gvZ, 3, 1)
         self.widget.setLayout(self.hbMainLayout)
         self.setCentralWidget(self.widget)
-        self.setWindowTitle("Py-Enditor")
+        self.setWindowTitle("Nodebox editor")
         self.resize(1000, 600)
 
     def createMenu(self):
@@ -113,7 +109,7 @@ class MainWindow(QMainWindow):
 
     def addBox(self):
         self.miniblocks.append(MiniBlock([-8, -8, -8, 1],
-                                                     [8, 8, 8, 1]))
+                                         [8, 8, 8, 1]))
         self.block_count += 1 # BTW, we will not decrease this value
         self.cbSelectBox.addItems(["Block" + str(self.block_count)])
         self.cbSelectBox.setCurrentIndex(self.cbSelectBox.count()-1)
@@ -146,12 +142,10 @@ class MainWindow(QMainWindow):
         self.slScale.valueChanged.connect(self.slScaleChange)
         self.slResolution.valueChanged.connect(self.slResolutionChange)
         self.aOpen.triggered.connect(self.actionOpen)
-        self.pbSwapXY.clicked.connect(self.swapXY)
-        self.pbSwapXZ.clicked.connect(self.swapXZ)
-        self.pbSwapYZ.clicked.connect(self.swapYZ)
-        self.pbTurnX.clicked.connect(self.turnX)
-        self.pbTurnY.clicked.connect(self.turnY)
-        self.pbTurnZ.clicked.connect(self.turnZ)
+        for (key, button) in self.turn_buttons.items():
+            button.clicked.connect(partial(self.turn, key))
+        for (key, button) in self.swap_buttons.items():
+            button.clicked.connect(partial(self.swap, key))
 
     def actionNewProject(self):
         self.miniblocks.clear()
@@ -231,35 +225,16 @@ class MainWindow(QMainWindow):
         self.sendResolution(2**self.slResolution.value())
         self.update()
 
-    def swapXY(self):
+    def swap(self, coords):
         for b in self.miniblocks:
-            b.swapXY()
+            b.swap(coords)
         self.update()
 
-    def swapXZ(self):
+    def turn(self, coord):
         for b in self.miniblocks:
-            b.swapXZ()
+            b.turn(coord)
         self.update()
 
-    def swapYZ(self):
-        for b in self.miniblocks:
-            b.swapYZ()
-        self.update()
-
-    def turnX(self):
-        for b in self.miniblocks:
-            b.turnX()
-        self.update()
-
-    def turnY(self):
-        for b in self.miniblocks:
-            b.turnY()
-        self.update()
-
-    def turnZ(self):
-        for b in self.miniblocks:
-            b.turnZ()
-        self.update()
 
 def main():
     app = QApplication(sys.argv)
@@ -269,3 +244,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
