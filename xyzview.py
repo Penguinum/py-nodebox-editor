@@ -15,13 +15,13 @@ class XYZview(QWidget):
     def __init__(self, parent, blocks, coords):
         super(XYZview, self).__init__(parent)
         self.Model = blocks
-        self.scale = 5
-        self.resolution = 16
-        self.current_block = 0
+        self.__scale = 5
+        self.__resolution = 16
+        self.__current_block = 0
         self.changing_point = 0
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.coord1 = "XYZ".find(coords[0])
-        self.coord2 = "XYZ".find(coords[1])
+        self.coord1 = "xyz".find(coords[0])
+        self.coord2 = "xyz".find(coords[1])
 
     def paintEvent(self, e):
         painter = QPainter(self)
@@ -34,7 +34,7 @@ class XYZview(QWidget):
     def drawCoordLines(self, p, w, h):
         x0, y0 = w/2, h/2
         self.x0, self.y0 = x0, y0
-        s = self.scale
+        s = self.__scale
         p.setPen(QPen(QColor(240, 240, 240), 1))
         cx = cx1 = x0
         p.drawLine(x0, 0, x0, h)
@@ -57,39 +57,39 @@ class XYZview(QWidget):
         p.drawText(QPoint(w/2, 10), "XYZ"[self.coord2])
         p.drawText(QPoint(w-10, h/2), "XYZ"[self.coord1])
         p.setPen(QPen(QColor(200, 200, 200), 2))
-        r = self.resolution
-        p.drawRect(x0 - self.scale*r/2, y0 - self.scale*r/2,
-                   self.scale*r, self.scale*r)
+        r = self.__resolution
+        p.drawRect(x0 - self.__scale*r/2, y0 - self.__scale*r/2,
+                   self.__scale*r, self.__scale*r)
 
     def drawModel(self, p, w, h):
-        scale = self.scale
+        __scale = self.__scale
         p.setPen(QPen(QColor(50, 50, 50), 2))
         x0, y0 = w/2, h/2
         for b in self.Model:
-            if b == self.current_block:
+            if b == self.__current_block:
                 pass
-            p.drawRect(x0 + scale*b.p1()[self.coord1],
-                    y0 - scale*b.p1()[self.coord2],
-                    scale*b.p2()[self.coord1] - scale*b.p1()[self.coord1],
-                    scale*b.p1()[self.coord2] - scale*b.p2()[self.coord2])
+            p.drawRect(x0 + __scale*b.p1()[self.coord1],
+                    y0 - __scale*b.p1()[self.coord2],
+                    __scale*b.p2()[self.coord1] - __scale*b.p1()[self.coord1],
+                    __scale*b.p1()[self.coord2] - __scale*b.p2()[self.coord2])
         p.setPen(QPen(QColor(50, 150, 50), 2))
-        if self.current_block != 0:
-            b = self.current_block
-            p.drawRect(x0 + scale*b.p1()[self.coord1],
-                    y0 - scale*b.p1()[self.coord2],
-                    scale*b.p2()[self.coord1] - scale*b.p1()[self.coord1],
-                    scale*b.p1()[self.coord2] - scale*b.p2()[self.coord2])
+        if self.__current_block != 0:
+            b = self.__current_block
+            p.drawRect(x0 + __scale*b.p1()[self.coord1],
+                    y0 - __scale*b.p1()[self.coord2],
+                    __scale*b.p2()[self.coord1] - __scale*b.p1()[self.coord1],
+                    __scale*b.p1()[self.coord2] - __scale*b.p2()[self.coord2])
 
     def mousePressEvent(self, e):
-        if self.current_block == 0:
+        if self.__current_block == 0:
             print("No current block")
             return
-        c1 = int((e.pos().x() - self.x0) / self.scale)
-        c2 = int((self.y0 - e.pos().y()) / self.scale)
-        p1c1 = self.current_block.p1()[self.coord1]
-        p1c2 = self.current_block.p1()[self.coord2]
-        p2c1 = self.current_block.p2()[self.coord1]
-        p2c2 = self.current_block.p2()[self.coord2]
+        c1 = int((e.pos().x() - self.x0) / self.__scale)
+        c2 = int((self.y0 - e.pos().y()) / self.__scale)
+        p1c1 = self.__current_block.p1()[self.coord1]
+        p1c2 = self.__current_block.p1()[self.coord2]
+        p2c1 = self.__current_block.p2()[self.coord1]
+        p2c2 = self.__current_block.p2()[self.coord2]
         rr1 = ((c1 - p1c1)**2 + (c2 - p1c2)**2)
         rr2 = ((c1 - p1c1)**2 + (c2 - p2c2)**2)
         rr3 = ((c1 - p2c1)**2 + (c2 - p1c2)**2)
@@ -113,20 +113,29 @@ class XYZview(QWidget):
             self.changing_point = 5 # no point selected
 
     def mouseMoveEvent(self, e):
-        c1 = int((e.pos().x() - self.x0) / self.scale)
-        c2 = int((self.y0 - e.pos().y()) / self.scale)
+        c1 = int((e.pos().x() - self.x0) / self.__scale)
+        c2 = int((self.y0 - e.pos().y()) / self.__scale)
         if self.changing_point == 1:
-            self.current_block.p1()[self.coord1] = c1
-            self.current_block.p1()[self.coord2] = c2
+            self.__current_block.p1()[self.coord1] = c1
+            self.__current_block.p1()[self.coord2] = c2
         elif self.changing_point == 2:
-            self.current_block.p1()[self.coord1] = c1
-            self.current_block.p2()[self.coord2] = c2
+            self.__current_block.p1()[self.coord1] = c1
+            self.__current_block.p2()[self.coord2] = c2
         elif self.changing_point == 3:
-            self.current_block.p2()[self.coord1] = c1
-            self.current_block.p1()[self.coord2] = c2
+            self.__current_block.p2()[self.coord1] = c1
+            self.__current_block.p1()[self.coord2] = c2
         elif self.changing_point == 4:
-            self.current_block.p2()[self.coord1] = c1
-            self.current_block.p2()[self.coord2] = c2
+            self.__current_block.p2()[self.coord1] = c1
+            self.__current_block.p2()[self.coord2] = c2
         elif self.changing_point == 5:
             print("something")
         self.parent().update()
+
+    def set_resolution(self, v):
+        self.__resolution = v
+
+    def set_scale(self, v):
+        self.__scale = v
+
+    def set_current_block(self, v):
+        self.__current_block = v

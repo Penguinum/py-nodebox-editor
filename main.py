@@ -40,9 +40,8 @@ class MainWindow(QMainWindow):
     def createGUI(self):
         self.widget = QWidget(self)
         self.gvMain = MainView(self, 0, self.miniblocks)
-        self.gvX = XYZview(self,self.miniblocks, "YZ")
-        self.gvY = XYZview(self,self.miniblocks, "XZ")
-        self.gvZ = XYZview(self,self.miniblocks, "XY")
+        self.views = {key: XYZview(self, self.miniblocks, key)
+                for key in ('xy', 'yz', 'zx')}
         self.cbSelectBox = QComboBox(self)
         self.pbAddBox = QPushButton("Add Box", self)
         self.pbDeleteBox = QPushButton("Delete selected box", self)
@@ -64,7 +63,7 @@ class MainWindow(QMainWindow):
         self.grLayout.addWidget(QLabel("Main view"), 0, 0)
         self.grLayout.addWidget(self.gvMain, 1, 0)
         self.grLayout.addWidget(QLabel("Y view"), 0, 1)
-        self.grLayout.addWidget(self.gvY, 1, 1)
+        self.grLayout.addWidget(self.views['zx'], 1, 1)
 
         self.vbRightLayout = QVBoxLayout()
         self.vbRightLayout.addWidget(QLabel("Select box"))
@@ -87,9 +86,9 @@ class MainWindow(QMainWindow):
         self.hbMainLayout.addLayout(self.vbRightLayout, 1)
 
         self.grLayout.addWidget(QLabel("X view"), 2, 0)
-        self.grLayout.addWidget(self.gvX, 3, 0)
+        self.grLayout.addWidget(self.views['yz'], 3, 0)
         self.grLayout.addWidget(QLabel("Z view"), 2, 1)
-        self.grLayout.addWidget(self.gvZ, 3, 1)
+        self.grLayout.addWidget(self.views['xy'], 3, 1)
         self.widget.setLayout(self.hbMainLayout)
         self.setCentralWidget(self.widget)
         self.setWindowTitle("Nodebox editor")
@@ -178,20 +177,17 @@ class MainWindow(QMainWindow):
             output_file.close()
 
     def sendCurrentBlock(self, block):
-        self.gvX.current_block =    block
-        self.gvY.current_block =    block
-        self.gvZ.current_block =    block
+        for view in self.views.values():
+            view.set_current_block(block)
 
     def sendScale(self, scale):
-        self.gvX.scale    = scale
-        self.gvY.scale    = scale
-        self.gvZ.scale    = scale
+        for view in self.views.values():
+            view.set_scale(scale)
         self.gvMain.scale = scale
 
     def sendResolution(self, resolution):
-        self.gvX.resolution    = resolution
-        self.gvY.resolution    = resolution
-        self.gvZ.resolution    = resolution
+        for view in self.views.values():
+            view.set_resolution(resolution)
         self.gvMain.resolution = resolution
         self.resolution        = resolution
 
