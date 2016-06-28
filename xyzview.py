@@ -7,7 +7,7 @@ except:
             QWidget, QSizePolicy)
     from PyQt4.QtCore import (QPoint)
 
-from point import MiniBlock
+from block import Block
 import numpy as np
 
 

@@ -1,12 +1,11 @@
 import os
-import point
 
 
 class codegen:
-    def __init__(self, filename, nodename, miniblocks, resolution):
+    def __init__(self, filename, nodename, blocks, resolution):
         self.filename = filename
         self.nodename = nodename
-        self.miniblocks = miniblocks
+        self.blocks = blocks
         self.scaling = resolution
         self.head = [
             "-- Generated code\n\n",
@@ -37,7 +36,7 @@ class codegen:
         output_file = open(export_as, "w+")
         for line in self.head:
             output_file.write(line)
-        for b in self.miniblocks:
+        for b in self.blocks:
             output_file.write("\t\t\t{" + ", ".join([
                 str(b.p1()[0]/s), str(b.p1()[2]/s), str(b.p1()[1]/s),
                 str(b.p2()[0]/s), str(b.p2()[2]/s), str(b.p2()[1]/s)]) + "},\n")

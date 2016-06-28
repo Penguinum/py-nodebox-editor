@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class MiniBlock(object):
+class Block(object):
     coord = {'x': 0, 'y': 1, 'z': 2}
 
     def __init__(self, p1, p2):
